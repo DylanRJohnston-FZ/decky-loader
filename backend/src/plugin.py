@@ -116,6 +116,9 @@ class PluginWrapper:
     async def _on_new_message(self, message : str) -> str|None:
         data = loads(message)
 
+        self.log.info("Received new message")
+        self.log.info(data)
+
         if "stop" in data:
             self.log.info("Calling Loader unload function.")
             await self._unload()
@@ -127,12 +130,15 @@ class PluginWrapper:
 
         # TODO there is definitely a better way to type this
         d: Dict[str, Any] = {"res": None, "success": True}
+
         try:
             d["res"] = await getattr(self.Plugin, data["method"])(self.Plugin, **data["args"])
         except Exception as e:
             d["res"] = str(e)
             d["success"] = False
         finally:
+            self.log.info("Replying with")
+            self.log.info(data)
             return dumps(d, ensure_ascii=False)
 
     def start(self):
