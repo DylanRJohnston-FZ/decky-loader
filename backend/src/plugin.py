@@ -138,7 +138,7 @@ class PluginWrapper:
             d["success"] = False
         finally:
             self.log.info("Replying with")
-            self.log.info(data)
+            self.log.info(d)
             return dumps(d, ensure_ascii=False)
 
     def start(self):
